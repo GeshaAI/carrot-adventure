@@ -8,6 +8,10 @@ Serve the repository over HTTP: `python3 -m http.server 8080`, then open http://
 
 Touch arrows (hold to repeat), one swipe per cell, arrow keys or WASD. Arrows depict isometric directions: up goes northeast; right goes southeast. Escape pauses. Every accepted step has a 180 ms hop; repeat interval is 210 ms. The game saves the current map, position, carrots, checkpoint, doors and sound choice after each move. Storage errors are handled with an on-screen message. Audio starts only after a gesture; all sounds and the quiet melody use Web Audio synthesis.
 
+## Standalone edition
+
+`carrot-adventure-v0.2.html` contains the same game, styles and graphics in one file, with no network dependencies. It can be served normally or opened as a local HTML file in a browser that allows scripts in downloaded files. Android file viewers differ; Chrome is recommended. Regenerate it after source changes with `python3 tools/build_offline.py`. CI verifies it matches the modules. File and HTTP versions have separate localStorage origins.
+
 ## Five gardens
 
 | Garden | Carrots | New mechanic |

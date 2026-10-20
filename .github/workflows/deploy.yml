@@ -17,6 +17,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - run: python3 tools/build_offline.py
+      - run: git diff --exit-code -- carrot-adventure-v0.2.html
       - run: npm test
       - run: npm install --no-save --package-lock=false playwright@1.62.1
       - run: npx playwright install --with-deps chromium
