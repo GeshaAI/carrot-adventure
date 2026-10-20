@@ -1,3 +1,10 @@
+# v0.3 — garden selection and visual polish
+
+Game code: `977d44340239de3439820c36e5efd67e04162240`.
+Successful Chromium run: https://github.com/GeshaAI/carrot-adventure/actions/runs/39425969212
+
+Passed all five level solutions, existing input/save checks and new checks for locked gardens, movement paused while choosing, resuming the same garden without resetting, selecting another unlocked garden, recorded personal bests, and unlocked gardens persisting after reload. Visual inspection of garden and menu screenshots confirmed the layout. Background palette variations, worn path patches and small mushrooms were added. Physical Android testing of this revision remains pending.
+
 # v0.2.1 — straight view and larger controls
 
 Game code: `8a5764953cce5708236393dff75d982e0310b978`.
