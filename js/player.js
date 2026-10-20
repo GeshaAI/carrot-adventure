@@ -1,0 +1,1 @@
+export function visualPosition(g,now){const a=g.animation;if(!a)return {...g.state.player,hop:0};const t=Math.min(1,(now-a.start)/180),e=t*t*(3-2*t);return {x:a.from.x+(a.to.x-a.from.x)*e,y:a.from.y+(a.to.y-a.from.y)*e,hop:Math.sin(t*Math.PI)};}

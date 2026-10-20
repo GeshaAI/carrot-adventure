@@ -1,0 +1,15 @@
+const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');const fs=require('fs');const path=require('path');const out=process.env.CARROT_TEST_OUTPUT||path.join(__dirname,'../test-output');fs.mkdirSync(out,{recursive:true});
+(async()=>{const b=await chromium.launch({headless:true,args:['--no-sandbox']});const page=await b.newPage({viewport:{width:1280,height:800},hasTouch:true,deviceScaleFactor:1.5});const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});await page.goto('http://127.0.0.1:8080');await page.waitForTimeout(400);await page.screenshot({path:path.join(out,'preview.png')});
+const snap=()=>page.evaluate(()=>window.carrotAdventure.snapshot());
+// Touch down/up produces one move, and survives reload.
+await page.locator('[data-dir=right]').tap();await page.waitForTimeout(210);if((await snap()).player.x!==2)throw Error('Touch move');await page.reload();await page.waitForTimeout(250);if((await snap()).player.x!==2)throw Error('Reload persistence');await page.locator('#restart').click();
+await page.locator('#pause').click();await page.keyboard.press('ArrowRight');if((await snap()).player.x!==1)throw Error('Pause');await page.locator('#next').click();
+// Swipe moves one step.
+const box=await page.locator('canvas').boundingBox();await page.mouse.move(box.x+box.width*.4,box.y+box.height*.5);await page.mouse.down();await page.mouse.move(box.x+box.width*.4+90,box.y+box.height*.5);await page.mouse.up();await page.waitForTimeout(220);if((await snap()).player.x!==2)throw Error('Swipe');await page.locator('#restart').click();
+const routes=JSON.parse(fs.readFileSync(__dirname+'/routes.json'));const keys={up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight'};
+// Advance browser time so real input traverses the solver route without wall-clock waiting.
+await page.clock.install();
+for(let i=0;i<routes.length;i++){for(const d of routes[i]){await page.keyboard.press(keys[d]);await page.clock.runFor(220);}if(!(await snap()).won)throw Error('Browser route '+i);console.log('PASS browser level '+(i+1));if(i<4)await page.locator('#next').click();}
+await page.screenshot({path:path.join(out,'victory.png')});await page.locator('#next').click();if((await snap()).index!==0)throw Error('Replay');await page.locator('#sound').click();await page.reload();if(await page.locator('#sound').getAttribute('aria-pressed')!=='false')throw Error('Sound save');
+for(const viewport of [{width:800,height:360},{width:800,height:1280}]){await page.setViewportSize(viewport);await page.waitForTimeout(150);if(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth))throw Error('Overflow');}
+if(errors.length)throw Error(errors.join('\n'));console.log('PASS touch, swipe, pause, progress reload, sound persistence, portrait/landscape, no JS errors');await b.close();})().catch(e=>{console.error(e);process.exit(1)});
