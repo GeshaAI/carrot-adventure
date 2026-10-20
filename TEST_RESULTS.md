@@ -1,3 +1,12 @@
+# v0.2.1 — straight view and larger controls
+
+Game code: `8a5764953cce5708236393dff75d982e0310b978`.
+Successful Chromium run: https://github.com/GeshaAI/carrot-adventure/actions/runs/39424473325
+
+All five maps completed in Chromium. Added real touch input in all four cardinal directions, normal arrow label checks and minimum 54 px button targets at the primary landscape viewport. Geometry checks confirm that screen axes match the grid and all five boards fit three viewports. Existing checks for swipe, pause, reload, sound preference, replay, standalone HTML and absence of JS errors also passed. The camera is now straight overhead without rotation. Physical Samsung testing of this revision remains pending.
+
+The earlier v0.2 results below describe the preceding isometric edition.
+
 # Verification — 20 October 2026
 
 Tested game code: commit `98ec8017f53fd8a85348d47241284c7cd15f187a`.
