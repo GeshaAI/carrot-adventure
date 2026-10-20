@@ -1,0 +1,12 @@
+import {levels} from './levels.js';
+import {canEnter,cell,directions} from './collision.js';
+export function initial(index=0){const l=levels[index];let player;const carrots=[];l.map.forEach((r,y)=>[...r].forEach((c,x)=>{if(c==='P')player={x,y};if(c==='C')carrots.push(`${x},${y}`);}));return {index,player,checkpoint:{...player},remaining:carrots,gates:0,moves:0,mistakes:0,won:false};}
+export function step(state,dir){if(state.won||!directions[dir])return {state,event:'blocked'};const l=levels[state.index],[dx,dy]=directions[dir],x=state.player.x+dx,y=state.player.y+dy;if(!canEnter(l,x,y,state.gates))return {state,event:'blocked'};
+const s={...state,player:{x,y},remaining:[...state.remaining],moves:state.moves+1};let event='step';const c=cell(l,x,y);
+if(c==='S'){s.player={...s.checkpoint};s.mistakes++;return {state:s,event:'trap'};}
+if(s.remaining.includes(`${x},${y}`)){s.remaining=s.remaining.filter(k=>k!==`${x},${y}`);event='carrot';}
+if(c==='A'||c==='B'){s.gates|=c==='A'?1:2;event='gate';}
+if(c==='K'){s.checkpoint={x,y};event='checkpoint';}
+if(c==='E'){s.won=!s.remaining.length;event=s.won?'win':'locked';}return {state:s,event};}
+export function validSave(s){try {if(!Number.isInteger(s.index)||s.index<0||s.index>=levels.length)return false;const clean=initial(s.index),l=levels[s.index];return Number.isInteger(s.gates)&&s.gates>=0&&s.gates<=3&&Array.isArray(s.remaining)&&new Set(s.remaining).size===s.remaining.length&&s.remaining.every(k=>clean.remaining.includes(k))&&[s.player,s.checkpoint].every(p=>p&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&canEnter(l,p.x,p.y,s.gates)&&cell(l,p.x,p.y)!=='S')&&['moves','mistakes'].every(k=>Number.isInteger(s[k])&&s[k]>=0)&&typeof s.won==='boolean'&&(!s.won||(!s.remaining.length&&cell(l,s.player.x,s.player.y)==='E'));}catch{return false;}}
+export class Game{constructor(saved,onChange){this.state=validSave(saved)?saved:initial();this.animation=null;this.onChange=onChange;this.paused=false;}move(dir,now=performance.now()){if(this.paused||(this.animation&&now-this.animation.start<185))return;const old=this.state;const r=step(old,dir);if(r.state===old)return;this.state=r.state;this.animation={from:old.player,to:r.state.player,start:now,event:r.event};if(r.event==='trap')this.animation.from={...r.state.player};this.onChange(r.event);}load(i){this.state=initial(i);this.animation=null;this.paused=false;this.onChange('load');}}
