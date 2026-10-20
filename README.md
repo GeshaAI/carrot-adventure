@@ -1,4 +1,4 @@
-# 🐰 CARROT ADVENTURE v0.3.0
+# 🐰 CARROT ADVENTURE v0.4.0
 
 Original straight-view garden puzzle game. HTML5 Canvas 2D, vanilla JavaScript modules, no runtime dependencies, paid APIs, accounts or external assets. Based on the supplied working v0.1 prototype (retained at `legacy/v01.html`). This repository previously contained only a README.
 
@@ -48,3 +48,7 @@ The workflow tests every PR and deploys only main. APK export is deliberately de
 ## v0.3: garden selection
 
 The ☷ header button pauses the game and shows all five gardens. Unlocked gardens can be replayed; locked gardens cannot be selected. Returning to the current garden preserves its current position. Selecting another garden starts that map again. Best move counts and unlocks persist alongside the current save. Background colors vary between gardens; paths have worn stone/dirt patches and small mushroom decorations. Straight view and large controls are retained.
+
+## v0.4: painted art
+
+Original transparent sprite atlas generated with the built-in image tool: `assets/environment/garden-atlas-v04.png`. Twelve assets include rabbit idle/hop/blink poses, carrot, flowering shrub, tree, mossy rock, flower/mushroom cluster, closed/open gate, checkpoint and spikes. `js/art.js` maps padded source rectangles without altering the source image. The rabbit switches poses while hopping and blinking. Terrain is a cached continuous meadow with connected dirt paths, fine grass and dust, without checkerboard tiles. A light parchment interface retains the tested straight grid and touch controls. The standalone HTML embeds the atlas as a data URL; no external image requests are required.
