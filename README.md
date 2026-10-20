@@ -1,4 +1,4 @@
-# 🐰 CARROT ADVENTURE v0.2.1
+# 🐰 CARROT ADVENTURE v0.3.0
 
 Original straight-view garden puzzle game. HTML5 Canvas 2D, vanilla JavaScript modules, no runtime dependencies, paid APIs, accounts or external assets. Based on the supplied working v0.1 prototype (retained at `legacy/v01.html`). This repository previously contained only a README.
 
@@ -44,3 +44,7 @@ Actual checks and limitations are recorded in `TEST_RESULTS.md`. No claim of tes
 4. Open the URL reported by the successful **Deploy** step. Expected address: `https://geshaai.github.io/carrot-adventure/`. This address is only live after a successful deployment.
 
 The workflow tests every PR and deploys only main. APK export is deliberately deferred until the browser game is approved on the target tablet.
+
+## v0.3: garden selection
+
+The ☷ header button pauses the game and shows all five gardens. Unlocked gardens can be replayed; locked gardens cannot be selected. Returning to the current garden preserves its current position. Selecting another garden starts that map again. Best move counts and unlocks persist alongside the current save. Background colors vary between gardens; paths have worn stone/dirt patches and small mushroom decorations. Straight view and large controls are retained.

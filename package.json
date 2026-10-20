@@ -1,1 +1,1 @@
-{"name":"carrot-adventure","version":"0.2.1","type":"module","scripts":{"test":"node tests/rules.test.js"}}
+{"name":"carrot-adventure","version":"0.3.0","type":"module","scripts":{"test":"node tests/rules.test.js"}}

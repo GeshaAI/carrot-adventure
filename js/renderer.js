@@ -19,7 +19,7 @@ export class Renderer{
  const point=view.project;
  c.clearRect(0,0,W,H);
  const bg=c.createRadialGradient(W*.4,H*.3,1,W*.5,H*.5,Math.max(W,H)*.7);
- bg.addColorStop(0,'#447953');bg.addColorStop(1,'#173f36');c.fillStyle=bg;c.fillRect(0,0,W,H);
+ const themes=[['#447953','#173f36'],['#4b7460','#193c37'],['#506d72','#243f45'],['#467d70','#163b3e'],['#5f7251','#283b37']];bg.addColorStop(0,themes[s.index][0]);bg.addColorStop(1,themes[s.index][1]);c.fillStyle=bg;c.fillRect(0,0,W,H);
  c.save();c.shadowColor='#071e2877';c.shadowBlur=18;c.shadowOffsetY=7;c.fillStyle='#526044';c.beginPath();c.roundRect(view.left-3,view.top-3,l.map[0].length*d+6,l.map.length*d+6,12);c.fill();c.restore();
  // All cells are axis aligned. Decorations stay inside their own cells.
  for(let y=0;y<l.map.length;y++)for(let x=0;x<l.map[y].length;x++){
@@ -30,7 +30,12 @@ export class Renderer{
  c.strokeStyle=water?'#b4ded033':'#d3e6a32b';c.lineWidth=1;c.strokeRect(a-d/2+.5,b-d/2+.5,d-1,d-1);
  if(water){for(let k=0;k<3;k++){const q=Math.sin(t*2+x+k)*d*.06;this.line(a-d*.32+q,b-d*.3+k*d*.3,a+d*.2+q,b-d*.3+k*d*.3,'#d4f2e17a',1.3);}if(ch==='='){c.fillStyle='#775a39';c.fillRect(a-d*.34,b-d*.5,d*.68,d);for(let k=0;k<6;k++){c.fillStyle=k%2?'#d5b476':'#bb945d';c.fillRect(a-d*.31,b-d*.5+k*d/6+1,d*.62,d/6-2);}this.line(a-d*.34,b-d*.5,a-d*.34,b+d*.5,'#f1d49c',2);this.line(a+d*.34,b-d*.5,a+d*.34,b+d*.5,'#f1d49c',2);}}
  else{for(let k=0;k<3;k++){const u=a+Math.sin(seed+k*8)*d*.36,v=b+Math.cos(seed+k*5)*d*.34;this.line(u,v,u+d*.025,v-d*.055,'#4e8b453d',1);}if(ch!== '#')this.oval(a,b,d*.29,d*.26,'#ded19a19');}
- if(ch==='#'){if((x===0||y===0)&&seed%3===0)this.tree(a,b+d*.24,d*.26,seed);else this.stone(a,b+d*.2,d*.55,seed);}
+ if('.PCEABKab'.includes(ch)){
+ const shades=['#d4ce9c66','#bdc8ad66','#c2c5ad66','#d2cb9366','#c8c1a166'];
+ c.fillStyle=shades[s.index];c.beginPath();c.roundRect(a-d*.36,b-d*.34,d*.72,d*.68,d*.19);c.fill();
+ for(let k=0;k<3;k++){const u=a+Math.sin(seed+k*5)*d*.24,v=b+Math.cos(seed+k*3)*d*.22;this.oval(u,v,d*.055,d*.025,'#e8dfbb55');}
+}
+if(ch==='#'){if((x===0||y===0)&&seed%3===0)this.tree(a,b+d*.24,d*.26,seed);else this.stone(a,b+d*.2,d*.55,seed);}
  if(ch==='C'&&s.remaining.includes(`${x},${y}`))this.carrot(a,b+d*.12,d*.65,t);
  if(ch==='A'||ch==='B'){const active=s.gates&(ch==='A'?1:2);c.fillStyle=active?'#7bd7b0':ch==='A'?'#edc069':'#80c7dc';c.beginPath();c.roundRect(a-d*.31,b-d*.31,d*.62,d*.62,d*.12);c.fill();c.strokeStyle='#f9efc4';c.stroke();c.fillStyle='#3e6451';c.font=`bold ${d*.25}px system-ui`;c.textAlign='center';c.textBaseline='middle';c.fillText(ch,a,b);}
  if(ch==='a'||ch==='b'){const open=s.gates&(ch==='a'?1:2);this.line(a-d*.37,b+d*.26,a-d*.37,b-d*.3,'#bfa475',d*.09);this.line(a+d*.37,b+d*.26,a+d*.37,b-d*.3,'#bfa475',d*.09);const opening=open&&g.animation?.event==='gate'?Math.max(0,1-(now-g.animation.start)/450):0;if(!open||opening>0){c.save();c.globalAlpha=open?opening:1;for(let k=-2;k<=2;k++)this.line(a+k*d*.13,b+d*.2,a+k*d*.13,b-d*.25,'#9d6e41',d*.08);this.line(a-d*.32,b+d*.1,a+d*.32,b-d*.17,'#e3bc79',d*.05);c.restore();}c.fillStyle=ch==='a'?'#f5ce7a':'#8ed7e7';this.oval(a-d*.37,b-d*.31,d*.06,d*.06,c.fillStyle);}
@@ -38,6 +43,8 @@ export class Renderer{
  if(ch==='K'){this.line(a-d*.1,b+d*.29,a-d*.1,b-d*.35,'#ddc795',d*.04);this.poly([[a-d*.1,b-d*.35],[a+d*.27,b-d*.24+Math.sin(t*4)*d*.02],[a-d*.1,b-d*.08]],'#ee9b54','#ffe0a0');this.oval(a,b+d*.31,d*.23,d*.07,'#eed9a855');}
  if(ch==='E'){const ready=!s.remaining.length;this.oval(a,b+d*.25,d*.34,d*.12,ready?'#f5d67577':'#7db9a255');for(const k of [-1,1])this.line(a+k*d*.27,b+d*.25,a+k*d*.27,b-d*.22,'#e2c77f',d*.09);c.beginPath();c.ellipse(a,b-d*.21,d*.27,d*.18,0,Math.PI,Math.PI*2);c.strokeStyle='#f4d993';c.lineWidth=d*.09;c.stroke();this.oval(a,b-d*.01,d*.2,d*.29,this.grad(a,b,d*.4,ready?'#fff6aa':'#add7bb',ready?'#d9a64b':'#488f78'));}
  if(ch==='.'&&(seed===2||seed===5))this.flower(a+d*.33,b+d*.35,d*.6,seed);
+if(ch==='#'&&seed===4){const u=a+d*.3,v=b+d*.28;this.line(u,v,u,v-d*.15,'#f2d7aa',d*.045);this.oval(u,v-d*.16,d*.1,d*.075,'#dc8c66');this.oval(u-d*.03,v-d*.19,d*.025,d*.02,'#fff0ce');}
+
  }
  const v=visualPosition(g,now),[a,b]=point(v.x,v.y);
  // Upright character fits inside one straight cell, including ears.
