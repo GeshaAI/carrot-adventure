@@ -27,7 +27,7 @@ export class Renderer{
  objects.push({x,y,ch,a,b,depth:x+y});}
  objects.push({rabbit:true,depth:v.x+v.y+.01});objects.sort((a,b)=>a.depth-b.depth);
  for(const o of objects){if(o.rabbit){const [a,b]=point(v.x,v.y);this.bunny(a,b,z,v.hop,t,s.won,g.animation?.event==='trap'&&now-g.animation.start<450);if(g.animation?.event==='carrot'&&now-g.animation.start<500){const q=(now-g.animation.start)/500;for(let k=0;k<6;k++)this.oval(a+Math.cos(k*1.047)*z*q,b-z*.6+Math.sin(k*1.047)*z*q,2*(1-q)+.1,2*(1-q)+.1,'#ffe78b');}continue;}const {x,y,ch,a,b}=o,seed=(x*17+y*31)%11;
- if(ch==='#'){if((x===0||y===0||x===cols-1||y===rows-1)&&seed%3===0)this.tree(a,b,z*.8,seed);else this.stone(a,b,z*.72,seed);}
+ if(ch==='#'){if((x===0||y===0)&&seed%3===0)this.tree(a,b,z*.8,seed);else this.stone(a,b,z*.72,seed);}
  if(ch==='C'&&s.remaining.includes(`${x},${y}`))this.carrot(a,b,z,t);
  if(ch==='A'||ch==='B'){const active=s.gates&(ch==='A'?1:2);this.poly([[a,b-h*.6],[a+z*.6,b],[a,b+h*.6],[a-z*.6,b]],active?'#7cd5b4':'#e0b355','#fff0b3');this.oval(a,b,z*.18,h*.2,active?'#defbd2':'#a77339');}
  if(ch==='a'||ch==='b'){let open=s.gates&(ch==='a'?1:2);for(let k of [-1,1])this.line(a+k*z*.58,b-z*.12,a+k*z*.58,b-z*.85,'#b29c65',z*.12);const opening=open&&g.animation?.event==='gate'?Math.max(0,1-(now-g.animation.start)/450):0;if(!open||opening>0){c.save();c.globalAlpha=open?opening:1;c.translate(0,open?-z*(1-opening):0);for(let k=-2;k<=2;k++)this.line(a+k*z*.22,b-z*.14,a+k*z*.22,b-z*.74,'#98623b',z*.12);this.line(a-z*.5,b-z*.33,a+z*.5,b-z*.6,'#e3b86e',z*.09);c.restore();}else this.line(a-z*.58,b-z*.8,a-z*.1,b-z*1.03,'#edd99a',z*.08);}

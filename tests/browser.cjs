@@ -9,7 +9,7 @@ const box=await page.locator('canvas').boundingBox();await page.mouse.move(box.x
 const routes=JSON.parse(fs.readFileSync(__dirname+'/routes.json'));const keys={up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight'};
 // Advance browser time so real input traverses the solver route without wall-clock waiting.
 await page.clock.install();
-for(let i=0;i<routes.length;i++){for(const d of routes[i]){await page.keyboard.press(keys[d]);await page.clock.runFor(220);}if(!(await snap()).won)throw Error('Browser route '+i);console.log('PASS browser level '+(i+1));if(i<4)await page.locator('#next').click();}
+for(let i=0;i<routes.length;i++){await page.clock.runFor(100);await page.screenshot({path:path.join(out,`garden-${i+1}.png`)});for(const d of routes[i]){await page.keyboard.press(keys[d]);await page.clock.runFor(220);}if(!(await snap()).won)throw Error('Browser route '+i);console.log('PASS browser level '+(i+1));if(i<4)await page.locator('#next').click();}
 await page.screenshot({path:path.join(out,'victory.png')});await page.locator('#next').click();if((await snap()).index!==0)throw Error('Replay');await page.locator('#sound').click();await page.reload();if(await page.locator('#sound').getAttribute('aria-pressed')!=='false')throw Error('Sound save');
 for(const viewport of [{width:800,height:360},{width:800,height:1280}]){await page.setViewportSize(viewport);await page.waitForTimeout(150);if(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth))throw Error('Overflow');}
 if(errors.length)throw Error(errors.join('\n'));console.log('PASS touch, swipe, pause, progress reload, sound persistence, portrait/landscape, no JS errors');await b.close();})().catch(e=>{console.error(e);process.exit(1)});
