@@ -1,12 +1,12 @@
-# 🐰 CARROT ADVENTURE v0.2
+# 🐰 CARROT ADVENTURE v0.2.1
 
-Original isometric garden puzzle game. HTML5 Canvas 2D, vanilla JavaScript modules, no runtime dependencies, paid APIs, accounts or external assets. Based on the supplied working v0.1 prototype (retained at `legacy/v01.html`). This repository previously contained only a README.
+Original straight-view garden puzzle game. HTML5 Canvas 2D, vanilla JavaScript modules, no runtime dependencies, paid APIs, accounts or external assets. Based on the supplied working v0.1 prototype (retained at `legacy/v01.html`). This repository previously contained only a README.
 
 ## Play
 
 Serve the repository over HTTP: `python3 -m http.server 8080`, then open http://localhost:8080. JavaScript modules require HTTP; opening index.html directly as a file is unsupported.
 
-Touch arrows (hold to repeat), one swipe per cell, arrow keys or WASD. Arrows depict isometric directions: up goes northeast; right goes southeast. Escape pauses. Every accepted step has a 180 ms hop; repeat interval is 210 ms. The game saves the current map, position, carrots, checkpoint, doors and sound choice after each move. Storage errors are handled with an on-screen message. Audio starts only after a gesture; all sounds and the quiet melody use Web Audio synthesis.
+Large touch arrows (hold to repeat), one swipe per cell, arrow keys or WASD. Screen and grid directions now match directly: up moves up and right moves right. The board has no rotation or perspective skew. Landscape mode places the D-pad in a separate side panel, freeing vertical space for the board. Escape pauses. Every accepted step has a 180 ms hop; repeat interval is 210 ms. The game saves the current map, position, carrots, checkpoint, doors and sound choice after each move. Storage errors are handled with an on-screen message. Audio starts only after a gesture; all sounds and the quiet melody use Web Audio synthesis.
 
 ## Standalone edition
 
@@ -26,7 +26,7 @@ Pressure plates latch permanently. A opens a; B opens b. Spikes return the rabbi
 
 ## Architecture and art
 
-`js/game.js` owns pure state transitions shared by runtime and solver. `levels.js`, `collision.js`, `player.js`, `input.js`, `save.js`, `audio.js`, `renderer.js` separate responsibilities. Canvas draws original shaded garden tiles, faceted rocks, layered trees, flowers, rippling water, wooden bridges, portals, pressure plates and a white rabbit with articulated ears, blinking and hops. No copied Bobby Carrot artwork. The `assets` folders describe the procedural assets; no additional downloads are needed. Pixel density is capped at 1.5; rendering is capped at about 30 fps to limit GPU work.
+`js/game.js` owns pure state transitions shared by runtime and solver. `levels.js`, `collision.js`, `player.js`, `input.js`, `save.js`, `audio.js`, `renderer.js` separate responsibilities. Canvas draws original axis-aligned shaded garden tiles, faceted rocks, layered trees, flowers, rippling water, wooden bridges, portals, pressure plates and a white rabbit with articulated ears, blinking and hops. No copied Bobby Carrot artwork. The `assets` folders describe the procedural assets; no additional downloads are needed. Pixel density is capped at 1.5; rendering is capped at about 30 fps to limit GPU work.
 
 ## Verification
 

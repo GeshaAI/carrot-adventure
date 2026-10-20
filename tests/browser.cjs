@@ -3,6 +3,9 @@ const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');const fs=r
 const snap=()=>page.evaluate(()=>window.carrotAdventure.snapshot());
 // Touch down/up produces one move, and survives reload.
 await page.locator('[data-dir=right]').tap();await page.waitForTimeout(210);if((await snap()).player.x!==2)throw Error('Touch move');await page.reload();await page.waitForTimeout(250);if((await snap()).player.x!==2)throw Error('Reload persistence');await page.locator('#restart').click();
+for(const [dir,label] of [['up','↑'],['left','←'],['right','→'],['down','↓']]){const btn=page.locator(`[data-dir=${dir}]`);if(await btn.textContent()!==label)throw Error('Arrow label '+dir);const r=await btn.boundingBox();if(r.width<54||r.height<54)throw Error('Touch target '+dir);}
+for(const dir of ['right','down','left','up']){await page.locator(`[data-dir=${dir}]`).tap();await page.waitForTimeout(220);}
+if((await snap()).player.x!==1||(await snap()).player.y!==1)throw Error('Four touch directions');
 await page.locator('#pause').click();await page.keyboard.press('ArrowRight');if((await snap()).player.x!==1)throw Error('Pause');await page.locator('#next').click();
 // Swipe moves one step.
 const box=await page.locator('canvas').boundingBox();await page.mouse.move(box.x+box.width*.4,box.y+box.height*.5);await page.mouse.down();await page.mouse.move(box.x+box.width*.4+90,box.y+box.height*.5);await page.mouse.up();await page.waitForTimeout(220);if((await snap()).player.x!==2)throw Error('Swipe');await page.locator('#restart').click();

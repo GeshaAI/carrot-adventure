@@ -11,3 +11,10 @@ let s=initial();assert.equal(step(s,'up').state,s);assert.equal(step(s,'left').s
 const g=new Game(null,()=>{});g.paused=true;g.move('right',0);assert.deepEqual(g.state,initial());g.paused=false;g.move('right',0);g.move('right',50);assert.equal(g.state.player.x,2);g.move('right',210);assert.equal(g.state.player.x,3);
 let data;globalThis.localStorage={setItem:(k,v)=>data=v,getItem:()=>data};assert(writeSave({state:s,sound:false,unlocked:2}));assert.deepEqual(readSave().state,s);data='invalid';assert.equal(readSave(),null);globalThis.localStorage={getItem:()=>{throw Error()},setItem:()=>{throw Error()}};assert.equal(readSave(),null);assert.equal(writeSave({}),false);
 fs.writeFileSync(new URL('./routes.json',import.meta.url),JSON.stringify(routes));console.log('PASS collision, single collection, pause, animation lock, invalid saves, localStorage roundtrip and failure');
+const {boardView}=await import('../js/view.js');
+for(const [width,height] of [[1040,640],[560,280],[760,850]])for(const l of levels){
+ const v=boardView(width,height,l.map[0].length,l.map.length),[x,y]=v.project(2,2);
+ assert(Math.abs(v.project(3,2)[0]-x-v.size)<1e-6);assert.equal(v.project(3,2)[1],y);assert.equal(v.project(2,3)[0],x);assert(Math.abs(v.project(2,3)[1]-y-v.size)<1e-6);
+ assert(v.left>=0&&v.top>=0);assert(v.left+l.map[0].length*v.size<=width);assert(v.top+l.map.length*v.size<=height);
+}
+console.log('PASS straight view: screen right/down match grid right/down and all maps fit three viewport sizes');

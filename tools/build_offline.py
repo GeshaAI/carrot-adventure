@@ -2,7 +2,7 @@
 from pathlib import Path
 import re
 p=Path(__file__).resolve().parents[1]
-order=['levels','collision','save','player','game','audio','input','renderer','main']
+order=['levels','collision','save','player','view','game','audio','input','renderer','main']
 parts=[]
 for name in order:
     code=(p/'js'/f'{name}.js').read_text()
